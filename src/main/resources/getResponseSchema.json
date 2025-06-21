@@ -1,0 +1,42 @@
+{
+  "type": "array",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "",
+  "minItems": 1,
+  "uniqueItems": true,
+  "items": {
+    "type": "object",
+    "required": [
+      "id",
+      "name",
+      "data"
+    ],
+    "properties": {
+      "id": {
+        "type": "string",
+        "minLength": 1
+      },
+      "name": {
+        "type": "string",
+        "minLength": 1
+      },
+      "data": {
+        "type": "object",
+        "properties": {
+          "color": {
+            "type": "string",
+            "minLength": 1
+          },
+          "capacity": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "color",
+          "capacity"
+        ]
+      }
+    }
+  }
+}
