@@ -6,6 +6,8 @@ public class data {
     private String CPUmodel;
     private String Harddisksize;
 
+    public data() {
+    }
     public data(String price, String year, String CPUmodel, String harddisksize) {
         this.price = price;
         this.year = year;

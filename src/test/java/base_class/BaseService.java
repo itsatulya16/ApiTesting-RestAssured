@@ -17,7 +17,7 @@ public class BaseService {
         return response;
     }
 
-    public Response hitPostRequest(addObjects payload, String endPoint){
+    public Response hitPostRequest(Object payload, String endPoint){
         Response response = given().contentType("application/json").body(payload).when().post(BASE_URL+endPoint);
         return response;
     }
