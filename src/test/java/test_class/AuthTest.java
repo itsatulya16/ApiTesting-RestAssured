@@ -1,20 +1,38 @@
 package test_class;
 
 import base_class.AuthService;
+import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
+import models.request.LoginRequest;
+import models.response.LoginResponse;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
 public class AuthTest {
 
-    @Test
-    public void loginTest() {
+    @Test(testName = "Login Test with valid credentials", description = "This test validates the login functionality")
+    public void loginTestWithValidCreds() {
+        LoginRequest loginRequest = new LoginRequest("atul", "Destiny@8796");
         AuthService authService = new AuthService();
-        Response response = authService.login("{\"username\":\"atul\",\"password\":\"Destiny@8796\"}");
+        Response response = authService.login(loginRequest);
         Assert.assertEquals(response.getStatusCode(), 200);
-        System.out.println("Response Body: " + response.prettyPrint());
+        LoginResponse loginResponse = response.as(LoginResponse.class);
+        System.out.println(response.prettyPrint());
+        String token = loginResponse.getToken();
+        Assert.assertNotNull(token, "Token is null in the response");
+    }
 
-
+    @Test
+    public void loginTestWithInvalidCreds() {
+        LoginRequest loginRequest = new LoginRequest("invalidUser", "invalidPass");
+        AuthService authService = new AuthService();
+        Response response = authService.login(loginRequest);
+        Assert.assertEquals(response.getStatusCode(), 401);
+        System.out.println(response.prettyPrint());
+        Assert.assertTrue(response.getBody().asString().contains("Invalid Credentials"), "Expected 'Unauthorized' message not found in the response");
+        JsonPath js = new JsonPath(response.getBody().asString());
+        Assert.assertEquals(js.getString("message"), "The username or password you entered is incorrect", "Error message is not correct");
+        Assert.assertEquals(js.getString("solution"), "Please check your credentials and try again", "Solution message is not correct");
     }
 
 }
