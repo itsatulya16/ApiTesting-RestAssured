@@ -11,6 +11,6 @@ public class TestBase {
         String token = TokenManager.getToken();
         BaseService baseService = new BaseService();
         baseService.setToken(token);
-        System.out.println("Token set in BaseService: " + token);
+        System.out.println("Token successfully set in BaseService");
     }
 }

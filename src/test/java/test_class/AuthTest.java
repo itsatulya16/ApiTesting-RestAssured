@@ -7,11 +7,16 @@ import models.request.ForgetPasswordReq;
 import models.request.LoginRequest;
 import models.response.ForgetPasswordRes;
 import models.response.LoginResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
+import utils.ResponseLogger;
 
 public class AuthTest {
+
+    private static final Logger logger = LoggerFactory.getLogger(AuthTest.class);
 
     @Test(testName = "Login Test with valid credentials", description = "This test validates the login functionality")
     public void loginTestWithValidCreds() {
@@ -20,7 +25,7 @@ public class AuthTest {
         Response response = authService.login(loginRequest);
         Assert.assertEquals(response.getStatusCode(), 200);
         LoginResponse loginResponse = response.as(LoginResponse.class);
-        System.out.println(response.prettyPrint());
+        ResponseLogger.logIfFailed(response);
         String token = loginResponse.getToken();
         Assert.assertNotNull(token, "Token is null in the response");
     }
@@ -31,7 +36,6 @@ public class AuthTest {
         AuthService authService = new AuthService();
         Response response = authService.login(loginRequest);
         Assert.assertEquals(response.getStatusCode(), 401);
-        System.out.println(response.prettyPrint());
         Assert.assertTrue(response.getBody().asString().contains("Invalid Credentials"), "Expected 'Unauthorized' message not found in the response");
         JsonPath js = new JsonPath(response.getBody().asString());
         Assert.assertEquals(js.getString("message"), "The username or password you entered is incorrect", "Error message is not correct");
@@ -44,8 +48,8 @@ public class AuthTest {
         AuthService authService = new AuthService();
         Response response = authService.forgetPass(forgetPasswordReq);
         SoftAssert softAssert = new SoftAssert();
-        softAssert.assertTrue(response.getStatusCode() == 200, "request failed and showing status code " + response.getStatusCode());
-        System.out.println(response.prettyPrint());
+        softAssert.assertEquals(response.getStatusCode(), 200, "status code is not correct");
+        ResponseLogger.logIfFailed(response);
         ForgetPasswordRes forgetPasswordRes = response.as(ForgetPasswordRes.class);
         softAssert.assertTrue(forgetPasswordRes.getMessage().equals("If your email exists in our system, you will receive reset instructions."),
                 "message is not same as per expected");
