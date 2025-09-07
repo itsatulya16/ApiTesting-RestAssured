@@ -3,6 +3,7 @@ package base_class;
 import static io.restassured.RestAssured.*;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 
+import io.qameta.allure.restassured.AllureRestAssured;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import  io.restassured.specification.RequestSpecification;
@@ -23,7 +24,9 @@ public class BaseService {
     }
 
     public BaseService() {
-        this.requestSpecification = given().baseUri(BASE_URL)
+        this.requestSpecification = given()
+                .filter(new AllureRestAssured())
+                .baseUri(BASE_URL)
                 .contentType("application/json").header("Authorization","Bearer "+getToken());
     }
 

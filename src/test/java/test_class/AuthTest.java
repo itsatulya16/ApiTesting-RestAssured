@@ -10,9 +10,12 @@ import models.response.LoginResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.Assert;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 import utils.ResponseLogger;
+
+@Listeners({io.qameta.allure.testng.AllureTestNg.class})
 
 public class AuthTest {
 
