@@ -3,10 +3,13 @@ package test_class;
 import base_class.AuthService;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
+import models.request.ForgetPasswordReq;
 import models.request.LoginRequest;
+import models.response.ForgetPasswordRes;
 import models.response.LoginResponse;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import org.testng.asserts.SoftAssert;
 
 public class AuthTest {
 
@@ -35,4 +38,18 @@ public class AuthTest {
         Assert.assertEquals(js.getString("solution"), "Please check your credentials and try again", "Solution message is not correct");
     }
 
+    @Test
+    public void verifyForgetPassword() {
+        ForgetPasswordReq forgetPasswordReq = new ForgetPasswordReq("atul@gamil.com");
+        AuthService authService = new AuthService();
+        Response response = authService.forgetPass(forgetPasswordReq);
+        SoftAssert softAssert = new SoftAssert();
+        softAssert.assertTrue(response.getStatusCode() == 200, "request failed and showing status code " + response.getStatusCode());
+        System.out.println(response.prettyPrint());
+        ForgetPasswordRes forgetPasswordRes = response.as(ForgetPasswordRes.class);
+        softAssert.assertTrue(forgetPasswordRes.getMessage().equals("If your email exists in our system, you will receive reset instructions."),
+                "message is not same as per expected");
+        softAssert.assertAll();
+
+    }
 }

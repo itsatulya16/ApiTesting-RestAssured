@@ -9,4 +9,7 @@ public class AuthService extends BaseService{
     public Response login(Object payload) {
       return postRequest(BASE_PATH + "login", payload);
     }
+    public Response forgetPass(Object payload){
+        return postRequest(BASE_PATH + "forgot-password", payload);
+    }
 }

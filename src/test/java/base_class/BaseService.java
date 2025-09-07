@@ -23,18 +23,19 @@ public class BaseService {
     }
 
     public BaseService() {
-        this.requestSpecification = given().baseUri(BASE_URL);
+        this.requestSpecification = given().baseUri(BASE_URL)
+                .contentType("application/json").header("Authorization","Bearer "+getToken());
     }
 
     protected Response postRequest(String endPoint, Object payload) {
-        return requestSpecification.contentType("application/json")
+        return requestSpecification
                 .body(payload)
                 .when()
                 .post(endPoint);
     }
 
     protected Response getRequest(String endPoint) {
-        return requestSpecification.contentType("application/json").header("Authorization","Bearer "+getToken())
+        return requestSpecification
                 .when()
                 .get(endPoint);
     }
