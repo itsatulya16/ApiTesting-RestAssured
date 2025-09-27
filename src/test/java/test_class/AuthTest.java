@@ -1,6 +1,7 @@
 package test_class;
 
 import base_class.AuthService;
+import io.qameta.allure.Allure;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import models.request.ForgetPasswordReq;
@@ -23,14 +24,17 @@ public class AuthTest {
 
     @Test(testName = "Login Test with valid credentials", description = "This test validates the login functionality")
     public void loginTestWithValidCreds() {
+        Allure.step("hit login request");
         LoginRequest loginRequest = new LoginRequest("atul", "Destiny@8796");
         AuthService authService = new AuthService();
         logger.info("Sending login request for user: {}", loginRequest.getUsername());
         Response response = authService.login(loginRequest);
+        Allure.step("validate response code is 200");
         Assert.assertEquals(response.getStatusCode(), 200);
         LoginResponse loginResponse = response.as(LoginResponse.class);
         ResponseLogger.logIfFailed(response);
         String token = loginResponse.getToken();
+        Allure.step("validate token is not null");
         Assert.assertNotNull(token, "Token is null in the response");
         logger.info("Login test completed successfully ✅");
     }

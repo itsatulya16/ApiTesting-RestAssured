@@ -10,4 +10,8 @@ public class AccountContollerService extends BaseService {
         return getRequest(BASE_PATH + "user");
     }
 
+    public Response createAccount(Object payload){
+        return postRequest("api/accounts", payload);
+    }
+
 }
