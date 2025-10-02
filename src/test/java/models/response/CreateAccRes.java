@@ -6,8 +6,18 @@ public class CreateAccRes {
     private double balance;
     private String status;
     private String branch;
-    private String createdAt;
     private String ownerName;
+    private String createdAt;
+
+    private String demoOn;
+
+    public String getDemoOn() {
+        return demoOn;
+    }
+
+    public void setDemoOn(String demoOn) {
+        this.demoOn = demoOn;
+    }
 
     public String getAccountNumber() {
         return accountNumber;
