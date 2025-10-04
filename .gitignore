@@ -12,6 +12,7 @@ target/
 *.iml
 *.ipr
 target/allure-results/
+logs/
 
 .idea/
 ### Eclipse ###

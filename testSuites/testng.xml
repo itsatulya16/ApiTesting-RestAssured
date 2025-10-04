@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="All Test Suite">
+    <listeners></listeners>
+    <test verbose="2" preserve-order="true" name="D:/API_Testing/src/test/java/test_class/AuthTest.java">
+        <classes>
+            <class name="test_class.AuthTest">
+                <methods>
+                    <include name="createUser"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+</suite>

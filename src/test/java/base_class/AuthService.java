@@ -12,4 +12,8 @@ public class AuthService extends BaseService{
     public Response forgetPass(Object payload){
         return postRequest(BASE_PATH + "forgot-password", payload);
     }
+
+    public Response signUp(Object payload){
+        return postRequest(BASE_PATH + "signup", payload);
+    }
 }

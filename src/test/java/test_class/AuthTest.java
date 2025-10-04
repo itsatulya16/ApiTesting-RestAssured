@@ -6,21 +6,26 @@ import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import models.request.ForgetPasswordReq;
 import models.request.LoginRequest;
+import models.request.SignUpReq;
+import models.request.User;
 import models.response.ForgetPasswordRes;
 import models.response.LoginResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
+import utils.ApiHelper;
+import utils.CsvDataProvider;
 import utils.ResponseLogger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 
 @Listeners({io.qameta.allure.testng.AllureTestNg.class})
 
 public class AuthTest {
 
-    private static final Logger logger = LoggerFactory.getLogger(AuthTest.class);
+    private static final Logger logger = LogManager.getLogger(AuthTest.class);
 
     @Test(testName = "Login Test with valid credentials", description = "This test validates the login functionality")
     public void loginTestWithValidCreds() {
@@ -45,7 +50,7 @@ public class AuthTest {
         AuthService authService = new AuthService();
         logger.info("Sending login request with invalid credentials");
         Response response = authService.login(loginRequest);
-        Assert.assertEquals(response.getStatusCode(), 401);
+        ApiHelper.validateStatusCode(response,401);
         Assert.assertTrue(response.getBody().asString().contains("Invalid Credentials"), "Expected 'Unauthorized' message not found in the response");
         JsonPath js = new JsonPath(response.getBody().asString());
         Assert.assertEquals(js.getString("message"), "The username or password you entered is incorrect", "Error message is not correct");
@@ -67,6 +72,33 @@ public class AuthTest {
                 "message is not same as per expected");
         softAssert.assertAll();
         logger.info("Forget password test completed successfully ✅");
+
+    }
+
+    @Test
+    public void signUp(){
+        String username = ApiHelper.generateRandomUserName(4);
+        String password = username + "@123";
+        String email = username + "@gmail.com";
+        String firstName = ApiHelper.generateRandomUserName(4);
+        String lastName = ApiHelper.generateRandomUserName(4);
+        String mobileNumber = ApiHelper.generateRandomMobileNumber();
+        SignUpReq signUpReq = new SignUpReq(username, password, email, firstName, lastName, mobileNumber);
+        AuthService authService = new AuthService();
+        Response response = authService.signUp(signUpReq);
+        logger.info(response.getBody().asString());
+        Assert.assertEquals(response.getStatusCode(), 200, "something wrong {}"+ response.getBody().asString());
+        logger.info(String.format("user created, username is: '%s', password is; '%s'", username, password));
+    }
+
+    // POJO + CSV Data provider
+    @Test(dataProvider = "userData", dataProviderClass = CsvDataProvider.class)
+    public void createUser(User user){
+        AuthService authService = new AuthService();
+        Response response = authService.signUp(user);
+        logger.info(response.getBody().asString());
+        Assert.assertEquals(response.getStatusCode(), 200, "something wrong {}"+ response.getBody().asString());
+        logger.info(String.format("user created, username is: '%s', password is; '%s'", user.getUsername(), user.getPassword()));
 
     }
 }

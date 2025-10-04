@@ -12,6 +12,7 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <suiteXmlFiles>testSuites/testng.xml</suiteXmlFiles>
     </properties>
     <dependencies>
         <!-- https://mvnrepository.com/artifact/io.rest-assured/rest-assured -->
@@ -60,6 +61,16 @@
         </dependency>
 
         <!-- Addding logging dependency -->
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>2.20.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>2.20.0</version> <!-- Use the latest stable version -->
+        </dependency>
 
 
 
@@ -77,6 +88,15 @@
             <artifactId>allure-rest-assured</artifactId>
             <version>2.24.0</version>
         </dependency>
+
+        <!-- open csv -->
+        <!-- pom.xml dependency -->
+        <dependency>
+            <groupId>com.opencsv</groupId>
+            <artifactId>opencsv</artifactId>
+            <version>5.9</version>
+        </dependency>
+
 
     </dependencies>
 
@@ -98,6 +118,9 @@
                     <systemPropertyVariables>
                         <allure.results.directory>${project.build.directory}/allure-results</allure.results.directory>
                     </systemPropertyVariables>
+                    <suiteXmlFiles>
+                        <suiteXmlFile>${suiteXmlFiles}</suiteXmlFile>
+                    </suiteXmlFiles>
                 </configuration>
             </plugin>
 
